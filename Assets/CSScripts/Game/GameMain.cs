@@ -78,9 +78,11 @@ namespace XiaoXu.Core
             managerList.Clear();
         }
         public static LuaManager luaManager { get; protected set; }
+        public static ResLoadManager resLoadManager { get; protected set; }
         void AddAllManagers() //注册管理器
         {
             luaManager = AddManager<LuaManager>("LuaManager");
+            resLoadManager = AddManager<ResLoadManager>("ResLoadManager");
         }
 
         public T AddManager<T>(string name) where T : BaseManager
@@ -89,6 +91,7 @@ namespace XiaoXu.Core
             if(sys == null)
             {
                 var obj = new GameObject(name);
+                obj.transform.SetParent(this.transform);
                 sys = obj.AddComponent<T>();
             }
             managerList.Add(sys);
