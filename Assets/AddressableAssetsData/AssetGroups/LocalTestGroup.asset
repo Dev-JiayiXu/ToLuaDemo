@@ -20,12 +20,14 @@ MonoBehaviour:
   - m_GUID: 28edc3354d51e104494f236a7a0d9351
     m_Address: TestSprite
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - sprite
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b9105c20eb1f44f488aa696a50b367e9
     m_Address: Player
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - gameobject
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 95b8ffcfdc032ca4db17228dbffee8af, type: 2}

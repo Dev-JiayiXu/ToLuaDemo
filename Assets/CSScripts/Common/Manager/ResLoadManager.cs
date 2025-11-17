@@ -9,48 +9,59 @@ namespace XiaoXu.Core
 {
     public class ResLoadManager : BaseManager
     {
-        //通过Addressable名字或者地址获得Handle
-        private Dictionary<string, AsyncOperationHandle> _handle = new Dictionary<string, AsyncOperationHandle>();
-
+        //通过Addressable名字或者地址获得Handle和计数器
+        private class AssetInfo
+        {
+            public AsyncOperationHandle Handle; 
+            public int RefCount = 0;
+        }
+        private Dictionary<string, AssetInfo> assetInfos = new Dictionary<string, AssetInfo>();
         public override void OnInit() { }
         public override void OnUpdate() { }
         public override void OnFixedUpdate() { }
         public override void OnLateUpdate() { }
 
-        //遍历Release所有Addressables资源
+        //遍历释放所有Addressables资源
         public override void OnDispose()
         {
-            foreach (var handle in _handle.Values)
+            foreach (var assetInfo in assetInfos.Values)
             {
-                if (handle.IsValid())
+                if (assetInfo.Handle.IsValid())
                 {
-                    Addressables.Release(handle);
+                    Addressables.Release(assetInfo.Handle);
                 }
             }
-            _handle.Clear();
+            assetInfos.Clear();
         }
 
-        // 加载资源的接口
+        // 加载单个资源
         public async Task<T> LoadAssetAsync<T>(string assetKey) where T : UnityEngine.Object
         {
             try
             {
-                // 如果已经加载过，直接返回
-                if (_handle.ContainsKey(assetKey) && _handle[assetKey].IsValid())
+                 // 并非第一次加载
+                if (assetInfos.TryGetValue(assetKey, out var assetInfo))
                 {
-                    return (T)_handle[assetKey].Result;
+                    assetInfo.RefCount++;
+                    return (T)assetInfo.Handle.Result;
                 }
 
+                // 第一次加载
                 AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(assetKey);
                 await handle.Task;
-                _handle[assetKey] = handle;
 
-                Debug.Log($"加载完成: {assetKey}");
+                assetInfo = new AssetInfo
+                {
+                    Handle = handle,
+                    RefCount = 1,
+                };
+
+                assetInfos[assetKey] = assetInfo;
                 return handle.Result;
             }
             catch (System.Exception ex)
             {
-                Debug.LogError($"资源加载失败 {assetKey}: {ex.Message}");
+                Debug.LogError($"加载失败 {assetKey}: {ex.Message}");
                 return null;
             }
         }
@@ -58,43 +69,46 @@ namespace XiaoXu.Core
         // 释放单个资源
         public void ReleaseAsset(string assetKey)
         {
-            if (_handle.ContainsKey(assetKey))
+            if (assetInfos.TryGetValue(assetKey, out var assetInfo))
             {
-                if (_handle[assetKey].IsValid())
+                assetInfo.RefCount--;
+
+                if (assetInfo.RefCount <= 0)
                 {
-                    Addressables.Release(_handle[assetKey]);
+                    if (assetInfo.Handle.IsValid())
+                    {
+                        Addressables.Release(assetInfo.Handle);
+                    }
+                    assetInfos.Remove(assetKey);
                 }
-                _handle.Remove(assetKey);
-                Debug.Log($"释放资源: {assetKey}");
             }
         }
 
-        // 实例化 GameObject
+        // 实例化GameObject，改对象池
         public async Task<GameObject> InstantiateAsync(string assetKey, Vector3 position, Quaternion rotation)
         {
             try
             {
                 AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(assetKey, position, rotation);
                 GameObject instance = await handle.Task;
-
-                Debug.Log($"实例化完成: {assetKey}");
                 return instance;
             }
             catch (System.Exception ex)
             {
-                Debug.LogError($"实例化失败 {assetKey}: {ex.Message}");
                 return null;
             }
         }
 
-        // 销毁实例化的对象
+        // 销毁实例化的对象，改对象池
         public void ReleaseInstance(GameObject instance)
         {
             if (instance != null)
             {
                 Addressables.ReleaseInstance(instance);
-                Debug.Log($"释放实例: {instance.name}");
             }
         }
+
+        // 通过Label加载一堆资源
+        // 释放一堆资源
     }
 }
