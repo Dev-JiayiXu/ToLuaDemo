@@ -18,12 +18,18 @@ MonoBehaviour:
   m_GUID: 43337ba60853fca4fa8959ded68c7d11
   m_SerializeEntries:
   - m_GUID: 28edc3354d51e104494f236a7a0d9351
-    m_Address: TestSprite
+    m_Address: UI_Sprite
     m_ReadOnly: 0
     m_SerializedLabels:
     - sprite
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b9105c20eb1f44f488aa696a50b367e9
+  - m_GUID: 7f11ec13d00d6cc4abdbfdbd9a65a2fe
+    m_Address: Plane
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - gameobject
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99df375d6c720df46921eb130535dcbb
     m_Address: Player
     m_ReadOnly: 0
     m_SerializedLabels:

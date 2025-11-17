@@ -79,13 +79,15 @@ namespace XiaoXu.Core
         }
         public static LuaManager luaManager { get; protected set; }
         public static ResLoadManager resLoadManager { get; protected set; }
-        //public static PoolManager poolManager { get; protected set; }
-        void AddAllManagers() //注册管理器
+        public static PoolManager poolManager { get; protected set; }
+		public static ResourceManager resourceManager { get; protected set; }
+		void AddAllManagers() //注册管理器
         {
             luaManager = AddManager<LuaManager>("LuaManager");
             resLoadManager = AddManager<ResLoadManager>("ResLoadManager");
-            //poolManager = AddManager<PoolManager>("PoolManager");
-        }
+            poolManager = AddManager<PoolManager>("PoolManager");
+			resourceManager = AddManager<ResourceManager>("ResourceManager");
+		}
 
         public T AddManager<T>(string name) where T : BaseManager
         {
