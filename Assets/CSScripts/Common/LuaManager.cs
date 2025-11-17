@@ -15,7 +15,7 @@ namespace XiaoXu.Core
             luaState.Start();
             LuaBinder.Bind(luaState);
             luaState.AddSearchPath(LuaConst.luaDir);
-            luaState.Require("Main");
+            luaState.Require("Requires");
         }
 
         public override void OnUpdate()

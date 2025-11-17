@@ -7,3 +7,7 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/LuaFramework/Scenes/main.unity
+    guid: 75eee5e7009aba84192cfcdff8590f2a
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: f07fcd22206b9294291032dd44518ca0,
+      type: 2}
