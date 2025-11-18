@@ -16,6 +16,11 @@ public static class LuaBinder
 		L.BeginModule("XiaoXu");
 		L.BeginModule("Core");
 		XiaoXu_Core_GameMainWrap.Register(L);
+		XiaoXu_Core_BaseManagerWrap.Register(L);
+		XiaoXu_Core_LuaManagerWrap.Register(L);
+		XiaoXu_Core_ResourceManagerWrap.Register(L);
+		XiaoXu_Core_ResLoadManagerWrap.Register(L);
+		XiaoXu_Core_PoolManagerWrap.Register(L);
 		L.EndModule();
 		L.EndModule();
 		L.BeginModule("UnityEngine");

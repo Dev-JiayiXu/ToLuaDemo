@@ -1,4 +1,6 @@
+require("GlobalVars")
 require("Requires")
+
 ---@class luaEntry
 ---@field  _frameworks IFrameworkMgr[]
 luaEntry = DefineClass{

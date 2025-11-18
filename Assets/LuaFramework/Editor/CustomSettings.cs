@@ -54,6 +54,11 @@ public static class CustomSettings
     {
         //_GT(typeof(Debug)),
         _GT(typeof(GameMain)),
+        _GT(typeof(XiaoXu.Core.BaseManager)),
+        _GT(typeof(XiaoXu.Core.LuaManager)),
+        _GT(typeof(XiaoXu.Core.ResourceManager)),
+        _GT(typeof(XiaoXu.Core.ResLoadManager)),
+        _GT(typeof(XiaoXu.Core.PoolManager)),
         #region UI
         _GT(typeof(Canvas)),
         _GT(typeof(CanvasGroup)),
