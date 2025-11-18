@@ -1,3 +1,4 @@
+require("Framework/Requires")
 require("Game/Requires")
 
-print("所有.lua代码加载完毕！")
+print("所有模块.lua代码加载完毕！")
