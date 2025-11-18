@@ -7,14 +7,8 @@ namespace XiaoXu.Core
 	public class PoolManager : BaseManager
 	{
 		[System.Serializable]
-		public class PoolConfig
-		{
-			public string poolName;
-			public GameObject prefab;
-			public int initSize = 10;
-			public int maxSize = 50;
-		}
 
+		//对象池
 		private class Pool
 		{
 			public string poolName;
@@ -23,7 +17,7 @@ namespace XiaoXu.Core
 			public List<GameObject> allObjects = new List<GameObject>();
 			public int maxSize;
 		}
-
+		//池字典，按名查找
 		private Dictionary<string, Pool> pools = new Dictionary<string, Pool>();
 		private Transform poolRoot;
 
@@ -32,13 +26,11 @@ namespace XiaoXu.Core
 			GameObject rootObj = new GameObject("PoolRoot");
 			poolRoot = rootObj.transform;
 			poolRoot.SetParent(transform);
-			DontDestroyOnLoad(rootObj);
 		}
 
 		public override void OnUpdate() { }
 		public override void OnFixedUpdate() { }
 		public override void OnLateUpdate() { }
-
 		public override void OnDispose()
 		{
 			ClearAllPools();
@@ -60,6 +52,7 @@ namespace XiaoXu.Core
 				maxSize = maxSize
 			};
 
+			//预加载池中物体
 			for (int i = 0; i < initSize; i++)
 			{
 				GameObject obj = CreateNewObject(prefab, poolName);
@@ -70,7 +63,6 @@ namespace XiaoXu.Core
 
 			pools[poolName] = pool;
 		}
-
 		// 从对象池获取对象
 		public GameObject GetFromPool(string poolName, Vector3 position, Quaternion rotation)
 		{
@@ -87,7 +79,7 @@ namespace XiaoXu.Core
 			{
 				obj = pool.availableObjects.Dequeue();
 			}
-			else if (pool.allObjects.Count < pool.maxSize)
+			else if (pool.allObjects.Count < pool.maxSize) //没有那就实例化出一个
 			{
 				obj = CreateNewObject(pool.prefab, poolName);
 				pool.allObjects.Add(obj);
@@ -104,7 +96,6 @@ namespace XiaoXu.Core
 				obj.transform.rotation = rotation;
 				obj.SetActive(true);
 
-				// 直接调用PoolObject的方法，不使用接口
 				PoolObject poolObject = obj.GetComponent<PoolObject>();
 				if (poolObject != null)
 					poolObject.OnSpawn();
@@ -112,7 +103,6 @@ namespace XiaoXu.Core
 
 			return obj;
 		}
-
 		// 回收到对象池
 		public void RecycleToPool(string poolName, GameObject obj)
 		{
@@ -120,7 +110,6 @@ namespace XiaoXu.Core
 
 			Pool pool = pools[poolName];
 
-			// 直接调用PoolObject的方法，不使用接口
 			PoolObject poolObject = obj.GetComponent<PoolObject>();
 			if (poolObject != null)
 				poolObject.OnDespawn();
@@ -133,10 +122,10 @@ namespace XiaoXu.Core
 				pool.availableObjects.Enqueue(obj);
 			}
 		}
-
-		// 工具方法
-		public bool HasPool(string poolName) => pools.ContainsKey(poolName);
-		public void ClearPool(string poolName)
+        // 有没有该池
+        public bool HasPool(string poolName) => pools.ContainsKey(poolName);
+        // 按名删除池，摧毁池中物体
+        public void ClearPool(string poolName)
 		{
 			if (pools.ContainsKey(poolName))
 			{
@@ -148,7 +137,7 @@ namespace XiaoXu.Core
 				pools.Remove(poolName);
 			}
 		}
-
+		// 删除所有池
 		public void ClearAllPools()
 		{
 			foreach (var pool in pools.Values)
@@ -160,7 +149,7 @@ namespace XiaoXu.Core
 			}
 			pools.Clear();
 		}
-
+		// 查询池中现有物体和所有物体数量
 		public (int available, int total) GetPoolStatus(string poolName)
 		{
 			if (pools.ContainsKey(poolName))
@@ -170,34 +159,18 @@ namespace XiaoXu.Core
 			}
 			return (0, 0);
 		}
-
+		//实例化池中物体
 		private GameObject CreateNewObject(GameObject prefab, string poolName)
 		{
-			GameObject obj = Instantiate(prefab);
+			GameObject obj = Instantiate(prefab); //TODO：思考要不要在这引用ResLoad的方法
 			obj.transform.SetParent(poolRoot);
 
 			PoolObject poolObject = obj.GetComponent<PoolObject>();
-			if (poolObject == null) poolObject = obj.AddComponent<PoolObject>();
+			if (poolObject == null) 
+				poolObject = obj.AddComponent<PoolObject>();
 			poolObject.poolName = poolName;
 
 			return obj;
-		}
-	}
-
-	// 池对象基础组件
-	public class PoolObject : MonoBehaviour
-	{
-		[HideInInspector]
-		public string poolName;
-
-		public virtual void OnSpawn()
-		{
-			// 对象被取出时的初始化
-		}
-
-		public virtual void OnDespawn()
-		{
-			// 对象被回收时的清理
 		}
 	}
 }

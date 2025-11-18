@@ -1,3 +1,3 @@
 require("Game/Player")
 
-print("Game modules loaded successfully!")
+print("游戏板块.lua代码加载完毕！")

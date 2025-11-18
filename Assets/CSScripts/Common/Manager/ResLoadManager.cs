@@ -22,7 +22,7 @@ namespace XiaoXu.Core
 		public override void OnUpdate() { }
 		public override void OnFixedUpdate() { }
 		public override void OnLateUpdate() { }
-
+		// 无条件释放所有资源
 		public override void OnDispose()
 		{
 			foreach (var assetInfo in assetInfos.Values)
@@ -34,7 +34,6 @@ namespace XiaoXu.Core
 			}
 			assetInfos.Clear();
 		}
-
 		// 加载单个资源
 		public async Task<T> LoadAssetAsync<T>(string assetKey) where T : UnityEngine.Object
 		{
@@ -60,11 +59,10 @@ namespace XiaoXu.Core
 			}
 			catch (System.Exception ex)
 			{
-				Debug.LogError($"加载失败 {assetKey}");
+				Debug.LogError($"加载失败 {assetKey},{ex.Message}");
 				return null;
 			}
 		}
-
 		// 释放单个资源
 		public void ReleaseAsset(string assetKey)
 		{
@@ -93,7 +91,7 @@ namespace XiaoXu.Core
 			}
 			catch (System.Exception ex)
 			{
-				Debug.LogError($"实例化失败 {assetKey}");
+				Debug.LogError($"实例化失败 {assetKey},{ex.Message}");
 				return null;
 			}
 		}
@@ -137,7 +135,7 @@ namespace XiaoXu.Core
 			}
 			catch (System.Exception ex)
 			{
-				Debug.LogError($"通过Label加载失败 {label}");
+				Debug.LogError($"通过Label加载失败 {label},{ex.Message}");
 				return new List<T>();
 			}
 		}
@@ -159,8 +157,9 @@ namespace XiaoXu.Core
 			}
 		}
 
-		// 获取资源信息
+		// 资源是否被加载好
 		public bool IsAssetLoaded(string assetKey) => assetInfos.ContainsKey(assetKey);
+		// 获取资源引用数量
 		public int GetAssetRefCount(string assetKey) => assetInfos.TryGetValue(assetKey, out var info) ? info.RefCount : 0;
 	}
 }

@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 43337ba60853fca4fa8959ded68c7d11
   m_SerializeEntries:
+  - m_GUID: 25459844cbd269d43a67a243b52f117b
+    m_Address: Enemy_Cube
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28edc3354d51e104494f236a7a0d9351
     m_Address: UI_Sprite
     m_ReadOnly: 0
