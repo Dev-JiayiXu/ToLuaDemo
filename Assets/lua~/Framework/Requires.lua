@@ -1,0 +1,11 @@
+require("Framework/Common/Container/Delegate")
+require("Framework/Common/Container/FreeVector")
+require("Framework/Common/Event/EventDispatcher")
+require("Framework/Common/Event/EventContainer")
+require("Framework/Common/Util/Class")
+require("Framework/Common/Util/SmartCallUtil")
+require("Framework/Resource/ResLoad")
+require("Framework/Resource/ResourceManager")
+require("Framework/Common/")
+
+print("Framework板块.lua代码加载完毕！")

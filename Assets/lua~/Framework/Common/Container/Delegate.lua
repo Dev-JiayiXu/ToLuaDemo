@@ -26,8 +26,8 @@ end
 ---@param thisObj table? 回调函数的self，可选
 function Delegate:AddCallback(func, thisObj)
     if func == nil then
-        Debug.Log("need a function for delegate...")
-        Debug.Log("need a function for delegate...")
+        print("need a function for delegate...")
+        print("need a function for delegate...")
         return
     end
     if not self._listeners then
@@ -41,7 +41,7 @@ end
 ---@param thisObj table? 回调函数的self，可选
 function Delegate:RemoveCallback(func, thisObj)
     if thisObj == nil and func == nil then
-        Debug.Log("thisObj or func can't all be nil'")
+        print("thisObj or func can't all be nil'")
         return
     end
     if self._listeners then
