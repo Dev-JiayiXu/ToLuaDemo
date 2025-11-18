@@ -1,3 +1,4 @@
+require("GlobalVars")
 require("Framework/Requires")
 require("Game/Requires")
 

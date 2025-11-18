@@ -1,4 +1,3 @@
-require("GlobalVars")
 require("Requires")
 
 ---@class luaEntry
