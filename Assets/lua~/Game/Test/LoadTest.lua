@@ -1,65 +1,66 @@
---用Lua调用测试
 ---@class LoadTest
----@field label string
----@field targetImage UnityEngine.Image
----@field imageSpriteAddress string
----@field enemyName string
----@field spawnParent UnityEngine.Transform
----@field spawnPosition UnityEngine.Vector3
----@field spawnRotation UnityEngine.Quaternion
----@field spawnedObjects FreeVector
 LoadTest = DefineClass()
-{
-    label = "",
-    targetImage = nil,
-    imageSpriteAddress = "",
-    enemyName = "",
-    spawnParent = nil,
-    spawnPosition = UnityEngine.Vector3.zero,
-    spawnRotation = UnityEngine.Quaternion.identity,
-    spawnedObjects = FreeVector,
-}
---初始化
-function LoadTest:Init()
-    self.spawnedObjects= FreeVector.S_NewFreeVector()
+
+function LoadTest:Start()
+    if not GameMain then
+        print("GameMain为空")
+    else
+        print("GameMain不为空")
+    end
+
+    self:LoadAndSpawnByLabel()
+    self:LoadAndSetSprite()
+    self:LoadAndSpawnByName()
 end
---用标签加载并实例化对象
----@param label string 标签
-function LoadTest:LoadAndSpawnByLabel(label)
-    FreeVector.S_NewFreeVector()
-    local assets = ResourceManager:LoadAssetsByLabelAsync(label)
+
+function LoadTest:LoadAndSpawnByLabel()
+    if not GameMain.resourceManager then
+        print("警告: GameMain.resourceManager 不存在，尝试直接获取")
+    end
+
+    local assets = ResourceManager:LoadAssetsByLabelAsync(self.label)
     for _, asset in ipairs(assets) do
-        if(asset ~= nil) then
-            local instance = ResourceManager:InstantiateAsync(asset.name, self.spawnPosition, self.spawnRotation)
-            if(instance ~= nil) then
-                if(self.spawnParent ~= nil) then
-                    instance.transform:SetParent(self.spawnParent,false)
-                end
-                self.spawnedObjects:PushBack(instance)
+        if asset ~= nil then
+            local instance = ResourceManager:Instantiate(asset.name, self.spawnPosition, self.spawnRotation)
+            if instance ~= nil and self.spawnParent ~= nil then
+                instance.transform:SetParent(self.spawnParent, false)
             end
         end
     end
 end
---加载并设置图片Sprite
----@param imageSpriteAddress string 图片Sprite地址
----@return Task 异步任务
+
+function LoadTest:LoadAndSpawnByName()
+    if string.IsNullOrEmpty(self.enemyName) then 
+        return 
+    end
+    
+    local enemy = ResourceManager:InstantiateAsync(self.enemyName, self.spawnPosition, self.spawnRotation)
+    if enemy ~= nil and self.spawnParent ~= nil then
+        enemy.transform:SetParent(self.spawnParent, false)
+    end
+end
+
 function LoadTest:LoadAndSetSprite()
-    local asset = ResourceManager:LoadAssetAsync(self.imageSpriteAddress)
-    if(asset ~= nil) then
-        self.targetImage.sprite = asset
+    if string.IsNullOrEmpty(self.imageSpriteAddress) or self.targetImage == nil then return end
+    
+    local sprite = ResourceManager:LoadAssetAsync(self.imageSpriteAddress)
+    if sprite ~= nil then
+        self.targetImage.sprite = sprite
         self.targetImage.preserveAspect = true
+        print("图片加载成功!")
+    else
+        print("图片加载失败!")
     end
 end
 
---销毁实例释放所有资源
-function LoadTest:Destroy()
-    for i = 1, self.spawnedObjects:Size() do
-        ResourceManager:DestroyInstance(self.spawnedObjects:At(i))
+function LoadTest:OnDestroy()
+    if not string.IsNullOrEmpty(self.imageSpriteAddress) then
+        ResourceManager:ReleaseAsset(self.imageSpriteAddress)
     end
-    self.spawnedObjects:Clear()
-
-    if(not string.IsNullOrEmpty(self.imageSpriteAddress)) then
-        ResourceManager:ReleaseAssetsByLabel(self.imageSpriteAddress)
+    
+    if not string.IsNullOrEmpty(self.label) then
+        ResourceManager:ReleaseAssetsByLabel(self.label)
     end
-    ResourceManager:ReleaseAssetsByLabel(self.label)
 end
+
+return LoadTest

@@ -8,14 +8,16 @@ namespace XiaoXu.Core
 {
     public class LuaManager : BaseManager
     {
-        protected LuaState luaState; // 获取虚拟机
+        public LuaState luaState; // 获取虚拟机
         public override void OnInit() //初始化虚拟机、读入lua文件
         {
             luaState = new LuaState();
             luaState.Start();
             LuaBinder.Bind(luaState);
             luaState.AddSearchPath(LuaConst.luaDir);
-            luaState.Require("LuaEntry"); //开始运行Lua代码
+
+			luaState["LuaResourceManager"] = GameMain.resourceManager;
+			luaState.Require("LuaEntry"); //开始运行Lua代码
         }
 
         public override void OnUpdate()

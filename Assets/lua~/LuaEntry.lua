@@ -8,6 +8,11 @@ luaEntry = DefineClass{
 
 function luaEntry:Init()
     self:AddFrameworks()
+    for i, framework in ipairs(self._frameworks) do
+        if framework.Init then
+            framework:Init()
+        end
+    end
 end
 function luaEntry:AddFrameworks()
     self:AddFramework(ResourceManager)

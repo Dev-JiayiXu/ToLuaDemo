@@ -1,8 +1,5 @@
 ---@class ResourceManager:IFrameworkMgr Lua侧封装的资源管理器
 ResourceManager = DeriveClass(IFrameworkMgr) 
-
-function ResourceManager:Init()
-end
 function ResourceManager:Reconnect()
 end
 function ResourceManager:Destroy()
@@ -14,6 +11,12 @@ end
 function ResourceManager:LoadAssetAsync(assetKey)
     return GameMain.resourceManager:LoadAssetAsync(assetKey)
 end
+---释放单个资源
+---@param assetKey string 资源路径
+function ResourceManager:ReleaseAsset(assetKey)
+    GameMain.resourceManager:ReleaseAsset(assetKey)
+end
+
 ---实例化对象
 ---@param assetKey string 资源路径
 ---@param position Vector3 位置

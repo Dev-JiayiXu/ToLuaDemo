@@ -64,6 +64,7 @@ namespace XiaoXu.Core
             {
                 manager.OnInit();
             }
+
         }
 
         void Remove() //释放所有管理器资源
@@ -83,10 +84,10 @@ namespace XiaoXu.Core
 		public static ResourceManager resourceManager { get; protected set; }
 		void AddAllManagers() //注册管理器
         {
-            luaManager = AddManager<LuaManager>("LuaManager");
             resLoadManager = AddManager<ResLoadManager>("ResLoadManager");
             poolManager = AddManager<PoolManager>("PoolManager");
 			resourceManager = AddManager<ResourceManager>("ResourceManager");
+			luaManager = AddManager<LuaManager>("LuaManager");
 		}
 
         public T AddManager<T>(string name) where T : BaseManager

@@ -13,9 +13,6 @@ LuaManager = {}
 ---@class ResLoadManager
 ResLoadManager = {}
 
----@class ResourceManager
-ResourceManager = {}
-
 ---@class PoolManager
 PoolManager = {}
 

@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 699245490}
   - component: {fileID: 699245491}
   - component: {fileID: 699245492}
+  - component: {fileID: 699245493}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -516,6 +517,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e86ebbc782f0f64d809698999d8dcf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &699245493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699245489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb998e247607c94488a624126766010, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  luaClassName: LoadTest
+  label: gameobject
+  targetImage: {fileID: 585535236}
+  imageSpriteAddress: UI_Sprite
+  enemyName: Enemy_Cube
+  spawnParent: {fileID: 0}
+  spawnPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &966272427
 GameObject:
   m_ObjectHideFlags: 0
