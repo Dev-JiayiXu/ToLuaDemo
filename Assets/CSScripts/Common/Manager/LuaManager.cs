@@ -9,18 +9,24 @@ namespace XiaoXu.Core
     public class LuaManager : BaseManager
     {
         public LuaState luaState; // 获取虚拟机
-        public override void OnInit() //初始化虚拟机、读入lua文件
-        {
-            luaState = new LuaState();
-            luaState.Start();
-            LuaBinder.Bind(luaState);
-            luaState.AddSearchPath(LuaConst.luaDir);
+		public override void OnInit()
+		{
+			luaState = new LuaState();
+			luaState.Start();
+			LuaBinder.Bind(luaState);
+			luaState.AddSearchPath(LuaConst.luaDir);
 
-			luaState["LuaResourceManager"] = GameMain.resourceManager;
-			luaState.Require("LuaEntry"); //开始运行Lua代码
-        }
+			// 延迟一帧执行Lua框架初始化，不然LuaManager就无法在Init()中获取到ResourceManager
+			StartCoroutine(DelayedLuaInit());
+		}
+		private IEnumerator DelayedLuaInit()
+		{
+			// 等一帧再进入LuaEntry
+			yield return null;
+			luaState.Require("LuaEntry");
+		}
 
-        public override void OnUpdate()
+		public override void OnUpdate()
         {
         }
         public override void OnFixedUpdate()
