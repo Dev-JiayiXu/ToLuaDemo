@@ -513,15 +513,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 699245489}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56655502c9980974fb900edc07941cfd, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e86ebbc782f0f64d809698999d8dcf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  label: gameobject
-  targetImage: {fileID: 585535236}
-  imageSpriteAddress: UI_Sprite
-  enemyName: Enemy_Cube
-  spawnParent: {fileID: 0}
-  spawnPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &966272427
 GameObject:
   m_ObjectHideFlags: 0

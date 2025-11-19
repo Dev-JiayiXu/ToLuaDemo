@@ -1,31 +1,57 @@
 ---@class ResourceManager:IFrameworkMgr Lua侧封装的资源管理器
 ResourceManager = DeriveClass(IFrameworkMgr) 
 
----@private
 function ResourceManager:Init()
-    self.resLoader = ResLoader:New()
 end
-
----获取资源加载器
----@return ResLoader 资源加载器
-function ResourceManager:GetResLoader()
-    return self.resLoader
+function ResourceManager:Reconnect()
 end
-
----预加载常用资源池
-function ResourceManager:PreloadCommonPools()
-    -- 预加载敌人池
-    self.resLoader:CreatePoolForAsset("Enemy_01", 5, 20)
-    self.resLoader:CreatePoolForAsset("Enemy_02", 5, 20)
-    -- 添加其他常用资源池...
-end
-
 function ResourceManager:Destroy()
-    if self.resLoader then
-        self.resLoader:Destroy()
-        self.resLoader = nil
-    end
-    self.resLoader = nil
+end
+
+---加载单个资源
+---@param assetKey string 资源路径
+---@return Task 异步任务
+function ResourceManager:LoadAssetAsync(assetKey)
+    return GameMain.resourceManager:LoadAssetAsync(assetKey)
+end
+---实例化对象
+---@param assetKey string 资源路径
+---@param position Vector3 位置
+---@param rotation Quaternion 旋转
+---@return Task 异步任务
+function ResourceManager:InstantiateAsync(assetKey, position, rotation)
+    return GameMain.resourceManager:InstantiateAsync(assetKey, position, rotation)
+end
+
+---销毁实例
+---@param instance GameObject 要销毁的实例
+function ResourceManager:DestroyInstance(instance)
+    GameMain.resourceManager:DestroyInstance(instance)
+end
+
+---通过标签加载多个资源
+function ResourceManager:LoadAssetsByLabelAsync(label)
+    return GameMain.resourceManager:LoadAssetsByLabelAsync(label)
+end
+
+---释放标签资源
+---@param label string 标签
+function ResourceManager:ReleaseAssetsByLabel(label)
+    GameMain.resourceManager:ReleaseAssetsByLabel(label)
+end
+
+---检查资源是否已加载
+---@param assetKey string 资源路径
+---@return boolean 是否已加载
+function ResourceManager:IsAssetLoaded(assetKey)
+    return GameMain.resourceManager:IsAssetLoaded(assetKey)
+end
+
+---获取资源引用计数
+---@param assetKey string 资源路径
+---@return number 引用计数
+function ResourceManager:GetAssetRefCount(assetKey)
+    return GameMain.resourceManager:GetAssetRefCount(assetKey)
 end
 
 return ResourceManager
