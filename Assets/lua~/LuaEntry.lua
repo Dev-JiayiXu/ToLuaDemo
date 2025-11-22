@@ -16,7 +16,7 @@ function luaEntry:Init()
 end
 function luaEntry:AddFrameworks()
     self:AddFramework(ResourceManager)
-    -- self:_AddFramework(UIManager)
+    self:_AddFramework(BagProxy)
 end
 
 ---@generic T: IFrameworkMgr

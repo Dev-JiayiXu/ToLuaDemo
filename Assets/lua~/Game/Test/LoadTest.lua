@@ -12,7 +12,7 @@ function LoadTest:Start()
     self:LoadAndSetSprite()
     self:LoadAndSpawnByName()
 end
-
+--用标签加载一组物体
 function LoadTest:LoadAndSpawnByLabel()
     if not GameMain.resourceManager then
         print("警告: GameMain.resourceManager 不存在，尝试直接获取")

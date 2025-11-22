@@ -56,7 +56,6 @@ namespace XiaoXu.Core
             Remove();
         }
         #endregion
-
         void Init() //初始化所有管理器
         {
             AddAllManagers();
@@ -64,9 +63,7 @@ namespace XiaoXu.Core
             {
                 manager.OnInit();
             }
-
         }
-
         void Remove() //释放所有管理器资源
         {
             for (int i = managerList.Count - 1; i >= 0; i--) //逆序避开顺序依赖
@@ -82,11 +79,13 @@ namespace XiaoXu.Core
         public static ResLoadManager resLoadManager { get; protected set; }
         public static PoolManager poolManager { get; protected set; }
 		public static ResourceManager resourceManager { get; protected set; }
+		public static ViewManager viewManager { get; protected set; }
 		void AddAllManagers() //注册管理器
         {
             resLoadManager = AddManager<ResLoadManager>("ResLoadManager");
             poolManager = AddManager<PoolManager>("PoolManager");
 			resourceManager = AddManager<ResourceManager>("ResourceManager");
+            viewManager = AddManager<ViewManager>("ViewManager");
 			luaManager = AddManager<LuaManager>("LuaManager");
 		}
 
