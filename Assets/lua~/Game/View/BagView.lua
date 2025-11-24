@@ -1,35 +1,68 @@
----@class BagView:BaseView 背包View
+---@class BagView:BaseView 背包界面视图
 BagView = DeriveClass(BaseView)
 
 function BagView:OnStart()
-    print("BagView启动")
-    
-    self.content = self:GetComponent("content")
-    if not self.content then
-        print("错误: 未找到content组件")
-        return
-    end
+    print("BagView动态启动")
     
     -- 设置物品预制体名称
     self.bagItemPrefabName = "BagItem"
-    self:RefreshBagItems()
+    
+    -- 如果已经有代理，初始化UI
+    if self.proxy then
+        self:InitializeUI()
+    else
+        print("BagView: 等待设置数据代理")
+    end
 end
 
-function BagView:OnUpdate()
+function BagView:SetProxy(proxy)
+    BaseView.SetProxy(self, proxy)
+    
+    -- 如果已经启动，初始化UI
+    if self.proxy then
+        self:InitializeUI()
+    end
+end
+
+function BagView:InitializeUI()
+    print("BagView初始化UI")
+    
+    -- 监听数据变化
+    self.proxy:AddDataListener("BagItemList", function(newValue, oldValue)
+        self:OnBagDataChanged(newValue, oldValue)
+    end)
+    
+    -- 初始刷新UI
+    self:RefreshBagItems()
 end
 
 function BagView:RefreshBagItems()
     if not self.proxy then
-        print("错误: 没有Proxy")
+        print("警告: 没有设置数据代理")
         return
     end
     
+    -- 这里需要有一个content组件来放置物品
+    -- 如果是动态创建的，可能需要通过其他方式获取content
+    if not self.content then
+        print("警告: 没有content组件，无法显示物品")
+        return
+    end
+    
+    -- 清空现有物品
     self:ClearBagItems()
+    
+    -- 获取物品数量
     local itemCount = self.proxy:GetBagItemCount()
+    print("需要创建 " .. itemCount .. " 个背包物品")
+    
+    -- 创建物品
     for i = 1, itemCount do
         self:CreateBagItem(i)
     end
 end
+
+-- 其他方法保持不变...
 
 function BagView:ClearBagItems()
     if not self.content then return end

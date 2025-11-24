@@ -7,4 +7,5 @@ require("Framework/Common/Event/EventContainer")
 require("Framework/Resource/ResourceManager")
 require("Framework/MVC/BaseView")
 require("Framework/MVC/BaseProxy")
+
 print("Framework板块.lua代码加载完毕！")

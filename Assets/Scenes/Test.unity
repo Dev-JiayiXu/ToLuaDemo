@@ -1204,7 +1204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ViewLuaName: BagView
-  ProxyLuaName: BagPRoxy
+  ProxyLuaName: BagProxy
   components:
   - componentName: content
     component: {fileID: 615204078}
